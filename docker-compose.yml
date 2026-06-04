@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: gs-carbono-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: gs_carbono
+    ports:
+      - "3306:3306"
+    volumes:
+      - gs_carbono_data:/var/lib/mysql
+    restart: unless-stopped
+
+volumes:
+  gs_carbono_data:
