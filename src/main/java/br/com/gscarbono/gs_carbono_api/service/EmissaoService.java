@@ -52,18 +52,29 @@ public class EmissaoService {
     }
 
     public EmissaoResponseDTO criar(EmissaoRequestDTO dto) {
+
         Usuario usuario = usuarioRepository.findById(dto.getUsuarioId())
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado com id: " + dto.getUsuarioId()));
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
         Setor setor = setorRepository.findById(dto.getSetorId())
-                .orElseThrow(() -> new RuntimeException("Setor não encontrado com id: " + dto.getSetorId()));
+                .orElseThrow(() -> new RuntimeException("Setor não encontrado"));
 
-        Emissao emissao = modelMapper.map(dto, Emissao.class);
+        Emissao emissao = new Emissao();
+
+        emissao.setFonteEmissao(dto.getFonteEmissao());
+        emissao.setQuantidadeCo2Toneladas(dto.getQuantidadeCo2Toneladas());
+        emissao.setDataEmissao(dto.getDataEmissao());
+        emissao.setTipoGas(dto.getTipoGas());
+        emissao.setDescricao(dto.getDescricao());
+        emissao.setLatitude(dto.getLatitude());
+        emissao.setLongitude(dto.getLongitude());
+
         emissao.setUsuario(usuario);
         emissao.setSetor(setor);
-        emissao.setId(null);
 
-        return toResponseDTO(emissaoRepository.save(emissao));
+        Emissao salva = emissaoRepository.save(emissao);
+
+        return toResponseDTO(salva);
     }
 
     public EmissaoResponseDTO atualizar(Long id, EmissaoRequestDTO dto) {
